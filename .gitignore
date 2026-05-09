@@ -10,9 +10,6 @@ coverage.html
 go.work
 go.work.sum
 
-# Demo GIF (generate locally with: make demo)
-docs/demo.gif
-
 # OS
 .DS_Store
 Thumbs.db

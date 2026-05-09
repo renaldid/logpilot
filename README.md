@@ -8,23 +8,7 @@
 
 logpilot fans in log streams from **Docker Compose services**, **log files**, and **systemd units** into a single interactive terminal UI — with real-time fuzzy search, per-service filtering, and follow/scroll mode.
 
-```
- logpilot                                                              follow ●
-┌──────────────┬─────────────────────────────────────────────────────────────────┐
-│ Services     │ 10:23:41 [api   ] INFO  GET /health 200 12ms                    │
-│              │ 10:23:41 [worker] INFO  processing job id=42                    │
-│ ● api        │ 10:23:42 [db    ] WARN  slow query 1.2s  SELECT * FROM events   │
-│ ● worker     │ 10:23:42 [api   ] ERROR upstream timeout on /api/v1/users       │
-│ ● db         │ 10:23:43 [api   ] INFO  POST /users 201 45ms                   │
-│              │ 10:23:43 [worker] INFO  job complete id=42 duration=0.3s        │
-│              │ 10:23:44 [db    ] INFO  connection pool: 4/10 active             │
-│              │ 10:23:44 [api   ] INFO  GET /metrics 200 3ms                    │
-├──────────────┼─────────────────────────────────────────────────────────────────┤
-│ / search     │ following • 8 entries • 3 services                              │
-└──────────────┴─────────────────────────────────────────────────────────────────┘
-```
-
-<!-- demo GIF: run `make demo` locally (requires vhs + ffmpeg) -->
+![logpilot demo](docs/demo.gif)
 
 ---
 
