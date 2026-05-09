@@ -1,0 +1,24 @@
+# Build output
+bin/
+dist/
+
+# Test coverage
+coverage.out
+coverage.html
+
+# Go workspace
+go.work
+go.work.sum
+
+# Demo GIF (generate locally with: make demo)
+docs/demo.gif
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo

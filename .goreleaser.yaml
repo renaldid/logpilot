@@ -1,0 +1,92 @@
+version: 2
+
+project_name: logpilot
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+
+builds:
+  - id: logpilot
+    main: .
+    binary: logpilot
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w
+      - -X github.com/renaldid/logpilot/cmd.Version={{.Version}}
+
+archives:
+  - id: default
+    formats:
+      - tar.gz
+    # e.g. logpilot_1.0.0_Linux_x86_64.tar.gz
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+    files:
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+changelog:
+  sort: asc
+  use: github
+  groups:
+    - title: New Features
+      regexp: "^.*feat[(\\w)]*:+.*$"
+      order: 0
+    - title: Bug Fixes
+      regexp: "^.*fix[(\\w)]*:+.*$"
+      order: 1
+    - title: Other
+      order: 999
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+      - "^ci:"
+      - "^refactor:"
+      - Merge pull request
+      - Merge remote-tracking branch
+
+release:
+  github:
+    owner: renaldid
+    name: logpilot
+  draft: false
+  prerelease: auto
+  name_template: "v{{.Version}}"
+  footer: |
+    ## Installation
+
+    ```sh
+    go install github.com/renaldid/logpilot@v{{.Version}}
+    ```
+
+    Or download a binary for your platform from the assets below.
+
+    **Full Changelog**: https://github.com/renaldid/logpilot/compare/{{ .PreviousTag }}...{{ .Tag }}

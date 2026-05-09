@@ -1,0 +1,20 @@
+buffer_size: 10000
+follow: true
+
+colors:
+  api:    "#7C3AED"
+  worker: "#059669"
+  db:     "#2563EB"
+
+sources:
+  - name: api
+    type: file
+    path: /tmp/logpilot-demo/api.log
+
+  - name: worker
+    type: file
+    path: /tmp/logpilot-demo/worker.log
+
+  - name: db
+    type: file
+    path: /tmp/logpilot-demo/db.log

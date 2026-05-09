@@ -1,0 +1,20 @@
+buffer_size: 10000
+follow: true
+
+sources:
+  - name: docker-compose
+    type: docker
+    compose_file: ./docker-compose.yml
+
+  - name: app-log
+    type: file
+    path: ./logs/app.log
+
+  - name: worker-log
+    type: file
+    path: ./logs/worker.log
+
+colors:
+  api:     "#7C3AED"
+  worker:  "#059669"
+  db:      "#D97706"
