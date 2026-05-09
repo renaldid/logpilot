@@ -150,7 +150,7 @@ func TestValidate_ValidConfig(t *testing.T) {
 		Sources: []SourceConfig{
 			{Name: "docker-src", Type: SourceTypeDocker},
 			{Name: "file-src", Type: SourceTypeFile, Path: "/tmp/app.log"},
-			{Name: "systemd-src", Type: SourceTypeSystemd},
+			{Name: "systemd-src", Type: SourceTypeSystemd, Unit: "nginx.service"},
 		},
 	}
 	assert.NoError(t, cfg.Validate())
@@ -159,4 +159,30 @@ func TestValidate_ValidConfig(t *testing.T) {
 func TestValidate_EmptySourcesIsValid(t *testing.T) {
 	cfg := &Config{BufferSize: 100}
 	assert.NoError(t, cfg.Validate())
+}
+
+func TestLoad_ValidationError_SystemdMissingUnit(t *testing.T) {
+	yaml := `
+buffer_size: 100
+sources:
+  - name: sshd
+    type: systemd
+`
+	path := writeYAML(t, yaml)
+	_, err := Load(path)
+	assert.Error(t, err)
+}
+
+func TestLoad_ValidSystemdConfig(t *testing.T) {
+	yaml := `
+buffer_size: 100
+sources:
+  - name: nginx
+    type: systemd
+    unit: nginx.service
+`
+	path := writeYAML(t, yaml)
+	cfg, err := Load(path)
+	require.NoError(t, err)
+	assert.Equal(t, "nginx.service", cfg.Sources[0].Unit)
 }

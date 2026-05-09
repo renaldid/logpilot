@@ -85,26 +85,6 @@ func TestBuildSources_FileSource(t *testing.T) {
 	assert.Equal(t, "logs", sources[0].Name())
 }
 
-func TestBuildSources_SystemdSource_Skips(t *testing.T) {
-	cfg := &config.Config{Sources: []config.SourceConfig{
-		{Name: "sshd", Type: config.SourceTypeSystemd},
-	}}
-	var buf bytes.Buffer
-	orig := os.Stderr
-	// redirect Stderr to capture the warning
-	r, w, _ := os.Pipe()
-	os.Stderr = w
-
-	sources, err := buildSources(cfg)
-
-	w.Close()
-	os.Stderr = orig
-	buf.ReadFrom(r)
-
-	assert.NoError(t, err)
-	assert.Empty(t, sources)
-	assert.Contains(t, buf.String(), "skipping")
-}
 
 func TestBuildSources_DockerSource_ConstructionError(t *testing.T) {
 	// Malformed URL causes NewClientWithOpts to fail at construction time.

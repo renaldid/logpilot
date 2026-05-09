@@ -94,7 +94,13 @@ func buildSources(cfg *config.Config) ([]source.LogSource, error) {
 		case config.SourceTypeFile:
 			sources = append(sources, source.NewFileSource(sc.Name, sc.Path))
 		case config.SourceTypeSystemd:
-			fmt.Fprintf(os.Stderr, "warning: systemd source %q not supported on this platform, skipping\n", sc.Name)
+			s, err := newSystemdSource(sc.Name, sc.Unit)
+			if err != nil {
+				return nil, fmt.Errorf("create source %q: %w", sc.Name, err)
+			}
+			if s != nil {
+				sources = append(sources, s)
+			}
 		}
 	}
 	return sources, nil

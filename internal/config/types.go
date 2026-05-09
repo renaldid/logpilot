@@ -15,8 +15,9 @@ const (
 type SourceConfig struct {
 	Name        string     `mapstructure:"name"`
 	Type        SourceType `mapstructure:"type"`
-	Path        string     `mapstructure:"path"`        // file sources
+	Path        string     `mapstructure:"path"`         // file sources
 	ComposeFile string     `mapstructure:"compose_file"` // docker sources
+	Unit        string     `mapstructure:"unit"`         // systemd sources
 }
 
 // Config is the top-level configuration loaded from .logpilot.yaml.
@@ -43,6 +44,9 @@ func (c *Config) Validate() error {
 		}
 		if s.Type == SourceTypeFile && s.Path == "" {
 			return errors.New("file source " + s.Name + " requires a path")
+		}
+		if s.Type == SourceTypeSystemd && s.Unit == "" {
+			return errors.New("systemd source " + s.Name + " requires a unit")
 		}
 	}
 	return nil
